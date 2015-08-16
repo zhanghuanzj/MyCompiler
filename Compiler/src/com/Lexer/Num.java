@@ -8,6 +8,6 @@ public class Num extends Token {
 		value = v;
 	}
 	public String toString() {
-		return "< "+Tag.getTagName(tag)+" , "+value+" >";
+		return "<"+Tag.getTagName(tag)+","+value+">";
 	}
 }

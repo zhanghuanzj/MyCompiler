@@ -1,5 +1,8 @@
 package com.Lexer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -8,8 +11,16 @@ public class Lexer {
 	public static int line = 1;  //record the line number
 	char peek = ' ';             //current character read
 	Hashtable<String, Word> reservedIdentifiers = new Hashtable<>();   //reserved keywords
-	
-	public Lexer() {
+	FileInputStream fis ;
+	public Lexer(String path) {
+		File file = new File(path);
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		// add the reserved identifiers to the hashtable
 		reserve(new Word(Tag.IF,"if"));
 		reserve(new Word(Tag.ELSE,"else"));
@@ -35,7 +46,7 @@ public class Lexer {
 	
 	//read the next char 
 	private void readChar() throws IOException {
-		peek = (char)System.in.read();
+		peek = (char)fis.read();
 	}
 	
 	//read the next char to see if it eauals to c
@@ -66,10 +77,15 @@ public class Lexer {
 	public Token scan() throws IOException {
 		//reduce the white space ,if it's a new line then add the line number
 		for( ; ;readChar()){
-			if (peek == ' '||peek == '\t') {
+			if (peek == ' '||peek == '\t'||peek == '\r') {     //'\r'»Ø³µ£¬13
 				continue;
 			}else if (peek == '\n') {
 				line++;
+				System.out.println();
+				
+				System.out.print("Line "+line+":");
+			}else if (peek == (char)-1) {
+				return null;
 			}else {
 				break;
 			}
@@ -112,13 +128,13 @@ public class Lexer {
 			}else {
 				return new Token('<');
 			}
-		case '~': return new Token('~');
-		case '^': return new Token('^');
-		case '+': return new Token('+');
-		case '-': return new Token('-');
-		case '*': return new Token('*');
-		case '/': return new Token('/');
-		case '%': return new Token('%');
+		case '~': peek = ' '; return new Token('~');
+		case '^': peek = ' '; return new Token('^');
+		case '+': peek = ' '; return new Token('+');
+		case '-': peek = ' '; return new Token('-');
+		case '*': peek = ' '; return new Token('*');
+		case '/': peek = ' '; return new Token('/');
+		case '%': peek = ' '; return new Token('%');
 		}
 		//get the number
 		if (isNumber(peek)) {
@@ -167,10 +183,11 @@ public class Lexer {
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		Lexer lex = new Lexer();
+		Lexer lex = new Lexer("Test.txt");
 		Token tok = lex.scan();
+		System.out.print("Line 1:");
 		while(tok!=null){
-			System.out.println(tok.toString());
+			System.out.print(tok.toString()+"__");
 			tok = lex.scan();
 		}
 		

@@ -8,6 +8,6 @@ public class Real extends Token {
 		value = f;
 	}
 	public String toStirng() {
-		return "< "+Tag.getTagName(tag)+" , "+value+" >";		
+		return "<"+Tag.getTagName(tag)+","+value+">";		
 	}
 }

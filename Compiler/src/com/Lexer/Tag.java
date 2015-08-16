@@ -49,7 +49,7 @@ public class Tag {
 		case WHILE:
 			return "WHILE";	
 		default:
-			return "Other";
+			return ""+(char)tag;
 		}
 		
 	}

@@ -1,0 +1,6 @@
+int i = 44;
+peek = ' ';
+if(j>i)
+print(j);
+else
+print(i);
